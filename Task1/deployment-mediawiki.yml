@@ -1,24 +1,39 @@
 apiVersion: apps/v1
+# Using deployment resource to make sure pods are always available
 kind: Deployment
 metadata:
   name: mediawiki-app
 spec:
   selector:
     matchLabels:
+      # lablel to match deployment resource to replica resource
       app: mediawiki-app
   replicas: 2
   template:
     metadata:
       labels:
+        # creating a label to be used for deployment resource
         app: mediawiki-app
     spec:
       containers:
+        # mediawiki container will be fetched from docker hub
         - name: mediawiki-container
           image: mediawiki
           volumeMounts:
             - mountPath: /var/www/html/images
               name: mediawiki-volume
+            # Below two lines need to be uncommented once the installation completes
+            # since LocalSettings.php will be available after installation
+            #- mountPath: /var/www/html/LocalSettings.php
+            #  name: mediawiki-config
           ports:
             - containerPort: 80
       volumes:
         - name: mediawiki-volume
+        # Below lone should be uncommented when LocalSettings.php available after installation
+        # we require to place the file in / direcorty and need to be mounted to make it available
+        # to the pod
+        #- name: mediawiki-config
+        #  hostPath:
+        #    path: /LocalSettings.php
+        #    type: File

@@ -1,4 +1,5 @@
 apiVersion: apps/v1
+#Using deployment resource to make sure one db replica always available
 kind: Deployment
 metadata:
   name: mediawiki-db
@@ -6,6 +7,7 @@ spec:
   selector:
     matchLabels:
       app: mediawiki-db
+  # creates one replica
   replicas: 1
   template:
     metadata:
@@ -14,11 +16,14 @@ spec:
     spec:
       containers:
         - name: mediawiki-db-container
+          # will fetch maridb from docker container
           image: mariadb
           ports:
+            # Exposing port which is also the default port
             - containerPort: 3306
               name: db-port
           env:
+            # Below env variable will create the diffrent user name and password for db
             - name: MYSQL_DATABASE
               value: my_wiki
             - name: MYSQL_USER

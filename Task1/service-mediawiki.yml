@@ -1,3 +1,6 @@
+# Below service spec will create a service for the mediawiki
+# app resource , I have used Nodeport ip to make sure it is
+# accessed from outside  kubernetes cluster.
 apiVersion: v1
 kind: Service
 metadata:

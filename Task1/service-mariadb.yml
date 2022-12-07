@@ -1,3 +1,7 @@
+# Below service spec will create a service for the mediawiki
+# DB resource , I have used cluster ip to make sure it is 
+# accessed inside kubernetes cluster, also I have exposed the
+# 3306 port to make sure it matches with default mariadb port
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,9 +9,10 @@ metadata:
   labels:
     app: mediawiki-db
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 3306
       protocol: TCP
+      targetPort: 3306
   selector:
     app: mediawiki-db
